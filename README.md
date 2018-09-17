@@ -2,7 +2,7 @@ README.md
 
 This is the Fall 2018 Managing Software Development Project Repository  
 
-Authors 
+Authors   
 Aditya Rathi  
 Survi Satpathy 
 
@@ -32,25 +32,25 @@ Your team needs to build a web-service that presents an API exposing these featu
 Tools and technologies
 We will be using the following tools this semester:
 
-Python
-Flask (simple web framework)
-Sphinx (for overall documentation)
-PostgreSQL (for data storage)
-Heroku (for deployments)
-Bitbucket (for source control)
-Swagger (for API documentation)
-JSON (for API interoperability)
-Peer review
+Python  
+Flask (simple web framework)  
+Sphinx (for overall documentation)  
+PostgreSQL (for data storage)  
+Heroku (for deployments)  
+Bitbucket (for source control) 
+Swagger (for API documentation)  
+JSON (for API interoperability)  
+Peer review  
 Peer review is an important part of building software; you can't build in a vacuum and often it helps to get an outsider's perspective. There will be 3 points at which you will be assigned a peer-review for another team:
 
 Application design documentation
-API design
-API documentation
-Deliverables
+API design  
+API documentation  
+Deliverables  
 You will need to deliver, by the 10th week of class, a functional and deployed API that manages to enable the user stories listed above. In addition to the functional service you need to provide documentation (the details of which we will cover later) both for your service at a high level as well as for your API (expectations, behavior, responses).
 
-Components / Points
-Functioning, deployed, and adheres to specifications - 50%
-API Documentation - 20%
-Design Documentation - 15%
-Peer-review of another team's service - 15%
+Components / Points  
+Functioning, deployed, and adheres to specifications - 50%  
+API Documentation - 20%  
+Design Documentation - 15%  
+Peer-review of another team's service - 15%  
