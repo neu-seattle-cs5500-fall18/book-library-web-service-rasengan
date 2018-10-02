@@ -1,4 +1,5 @@
 import datetime
+
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
@@ -20,7 +21,6 @@ class Book(db.Model):
     to_be_returned_on = db.Column(db.DateTime)
     is_returned = db.Column(db.Boolean)
 
-
     def __init__(self, title, author, genre, published_on, notes, lent_to, to_be_returned_on, is_returned):
         self.title = title
         self.author = author
@@ -39,9 +39,11 @@ class Borrower(db.Model):
     def __init__(self, name):
         self.name = name
 
+
 @app.route('/')
 def hello_world():
     return 'Hello World! Heroku deployed'
+
 
 @app.route('/add')
 def test_record_add():
@@ -51,11 +53,13 @@ def test_record_add():
     db.session.commit()
     return "Successfully added"
 
+
 @app.route('/show')
 def test_record_show():
     test_record = Borrower.query.filter_by(name='Survi').first()
     print(test_record.id, " ", test_record.name)
     return test_record.name
+
 
 @app.route('/delete')
 def test_record_delete():
@@ -66,6 +70,7 @@ def test_record_delete():
     after_delete=Borrower.query.filter_by(name="Survi").first()
     print(after_delete.id)
     return "Successfully deleted"
+
 
 if __name__ == '__main__':
     app.run()
