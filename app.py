@@ -18,22 +18,22 @@ def create_app():
         return jsonify(response='Hello World! Heroku deployed'), HTTPStatus.OK
 
     @app.route('/add')
-    def test_record_add():
+    def record_add():
         db.create_all()
         borrower1 = Borrower("Survi")
         db.session.add(borrower1)
         db.session.commit()
-        return "Successfully added"
+        return jsonify(response='Successfully added'), HTTPStatus.CREATED
 
     @app.route('/show')
-    def test_record_show():
+    def record_show():
         test_record = Borrower.query.filter_by(name='Survi').first()
         print(test_record.id, " ", test_record.name)
         return test_record.name
 
     @app.route('/delete')
-    def test_record_delete():
-        record = test_record_show()
+    def record_delete():
+        record = record_show()
         before_delete = Borrower.query.filter_by(name=record).first()
         db.session.delete(before_delete)
         db.session.commit()
