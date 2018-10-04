@@ -1,13 +1,48 @@
 import datetime
+from http import HTTPStatus
 
-from flask import Flask
+from flask import Flask, jsonify
 from flask_sqlalchemy import SQLAlchemy
 
-app = Flask(__name__)
-app.config[
-    'SQLALCHEMY_DATABASE_URI'] = 'postgres://mtwahsiiuuodov:ea5fbd9f4720b2ddfbc9998cd490f8be902e86a01aa8b8b5e0fc31dc904f8219@ec2-50-17-225-140.compute-1.amazonaws.com:5432/dc86b8ec8qdppu'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-db = SQLAlchemy(app)
+db = SQLAlchemy()
+
+
+def create_app():
+    app = Flask(__name__)
+    app.config[
+        'SQLALCHEMY_DATABASE_URI'] = 'postgres://mtwahsiiuuodov:ea5fbd9f4720b2ddfbc9998cd490f8be902e86a01aa8b8b5e0fc31dc904f8219@ec2-50-17-225-140.compute-1.amazonaws.com:5432/dc86b8ec8qdppu'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+    @app.route('/')
+    def hello_world():
+        return jsonify(response='Hello World! Heroku deployed'), HTTPStatus.OK
+
+    @app.route('/add')
+    def test_record_add():
+        db.create_all()
+        borrower1 = Borrower("Survi")
+        db.session.add(borrower1)
+        db.session.commit()
+        return "Successfully added"
+
+    @app.route('/show')
+    def test_record_show():
+        test_record = Borrower.query.filter_by(name='Survi').first()
+        print(test_record.id, " ", test_record.name)
+        return test_record.name
+
+    @app.route('/delete')
+    def test_record_delete():
+        record = test_record_show()
+        before_delete = Borrower.query.filter_by(name=record).first()
+        db.session.delete(before_delete)
+        db.session.commit()
+        after_delete = Borrower.query.filter_by(name="Survi").first()
+        print(after_delete.id)
+        return "Successfully deleted"
+
+    db.init_app(app)
+    return app
 
 
 class Book(db.Model):
@@ -40,37 +75,6 @@ class Borrower(db.Model):
         self.name = name
 
 
-@app.route('/')
-def hello_world():
-    return 'Hello World! Heroku deployed'
-
-
-@app.route('/add')
-def test_record_add():
-    db.create_all()
-    borrower1 = Borrower("Survi")
-    db.session.add(borrower1)
-    db.session.commit()
-    return "Successfully added"
-
-
-@app.route('/show')
-def test_record_show():
-    test_record = Borrower.query.filter_by(name='Survi').first()
-    print(test_record.id, " ", test_record.name)
-    return test_record.name
-
-
-@app.route('/delete')
-def test_record_delete():
-    record = test_record_show()
-    before_delete=Borrower.query.filter_by(name=record).first()
-    db.session.delete(before_delete)
-    db.session.commit()
-    after_delete=Borrower.query.filter_by(name="Survi").first()
-    print(after_delete.id)
-    return "Successfully deleted"
-
-
 if __name__ == '__main__':
+    app = create_app()
     app.run()
