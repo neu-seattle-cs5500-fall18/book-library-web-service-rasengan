@@ -75,6 +75,8 @@ class Borrower(db.Model):
         self.name = name
 
 
+application = create_app()
+
+
 if __name__ == '__main__':
-    app = create_app()
-    app.run()
+    application.run()
