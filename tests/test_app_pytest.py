@@ -16,3 +16,9 @@ def test_hw(client):
     res = client.get('/')
     assert res.status_code == HTTPStatus.OK
     assert res.json == {'response': 'Hello World! Heroku deployed'}
+
+
+def test_add(client):
+    res = client.get('/add')
+    assert res.status_code == HTTPStatus.CREATED
+    assert res.json == {'response': 'Successfully added'}
