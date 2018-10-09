@@ -9,15 +9,9 @@ from database.models import db, Borrower
 borrower_app = Blueprint('borrower_app', __name__)
 
 
-@borrower_app.route('/')
-def show():
-    return jsonify(response='Borrower stuff'), HTTPStatus.OK
-
-
-@borrower_app.route('/add')
-def record_add():
-    db.create_all()
-    borrower1 = Borrower("Survi")
-    db.session.add(borrower1)
+@borrower_app.route('/add/<person>')
+def add(person):
+    borrower = Borrower(person)
+    db.session.add(borrower)
     db.session.commit()
-    return jsonify(response='Successfully added'), HTTPStatus.CREATED
+    return jsonify(response='Successfully added ' + person), HTTPStatus.CREATED

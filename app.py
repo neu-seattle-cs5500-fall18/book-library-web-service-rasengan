@@ -13,6 +13,8 @@ def create_app():
     app.config[
         'SQLALCHEMY_DATABASE_URI'] = database_uri
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    with app.app_context():
+        db.init_app(app)
     app.register_blueprint(book_app, url_prefix='/book')
     app.register_blueprint(borrower_app, url_prefix='/borrower')
 
@@ -35,13 +37,10 @@ def create_app():
         after_delete = Borrower.query.filter_by(name="Survi").first()
         print(after_delete.id)
         return "Successfully deleted"
-
-    db.init_app(app)
     return app
 
 
-application = create_app()
-
-
 if __name__ == '__main__':
+    application = create_app()
+    db.create_all()
     application.run()
