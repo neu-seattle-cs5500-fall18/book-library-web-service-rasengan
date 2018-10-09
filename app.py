@@ -13,20 +13,12 @@ def create_app():
     app.config[
         'SQLALCHEMY_DATABASE_URI'] = database_uri
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.register_blueprint(book_app)
-    app.register_blueprint(borrower_app)
+    app.register_blueprint(book_app, url_prefix='/book')
+    app.register_blueprint(borrower_app, url_prefix='/borrower')
 
     @app.route('/')
     def hello_world():
         return jsonify(response='Hello World! Heroku deployed'), HTTPStatus.OK
-
-    @app.route('/add')
-    def record_add():
-        db.create_all()
-        borrower1 = Borrower("Survi")
-        db.session.add(borrower1)
-        db.session.commit()
-        return jsonify(response='Successfully added'), HTTPStatus.CREATED
 
     @app.route('/show')
     def record_show():

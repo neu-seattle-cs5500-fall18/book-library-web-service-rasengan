@@ -7,6 +7,6 @@ from flask import (
 book_app = Blueprint('book_app', __name__)
 
 
-@book_app.route('/book')
+@book_app.route('/')
 def show():
     return jsonify(response='Book stuff'), HTTPStatus.OK
