@@ -2,8 +2,10 @@ from http import HTTPStatus
 
 from flask import Flask, jsonify
 
+from book import book_app
+from borrower import borrower_app
 from config import database_uri
-from database.db import db, Borrower
+from database.models import db, Borrower
 
 
 def create_app():
@@ -11,6 +13,8 @@ def create_app():
     app.config[
         'SQLALCHEMY_DATABASE_URI'] = database_uri
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.register_blueprint(book_app)
+    app.register_blueprint(borrower_app)
 
     @app.route('/')
     def hello_world():
