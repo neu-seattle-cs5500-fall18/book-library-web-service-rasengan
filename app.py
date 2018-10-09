@@ -2,8 +2,8 @@ from http import HTTPStatus
 
 from flask import Flask, jsonify
 
-from .config import database_uri
-from .database.db import db, Borrower
+from config import database_uri
+from database.db import db, Borrower
 
 
 def create_app():
