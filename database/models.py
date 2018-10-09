@@ -7,24 +7,20 @@ db = SQLAlchemy()
 
 class Book(db.Model):
     id = db.Column('book_id', db.Integer, primary_key=True)
-    title = db.Column(db.String(100))
-    author = db.Column(db.String(50))
-    genre = db.Column(db.String(200))
+    title = db.Column(db.String(100),nullable=False)
+    author = db.Column(db.String(50),nullable=False)
+    genre = db.Column(db.String(200),nullable=False)
     published_on = db.Column(db.DateTime, default=datetime.datetime.utcnow)
-    notes = db.Column(db.String(50))
-    lent_to = db.Column(db.Integer)
-    to_be_returned_on = db.Column(db.DateTime)
-    is_returned = db.Column(db.Boolean)
+    notes = db.Column(db.String(50),default="")
+    lent_to = db.Column(db.Integer, default=None)
+    to_be_returned_on = db.Column(db.DateTime, default=None)
+    is_returned = db.Column(db.Boolean,default=False)
 
-    def __init__(self, title, author, genre, published_on, notes, lent_to, to_be_returned_on, is_returned):
+    def __init__(self, title, author, genre, published_on):
         self.title = title
         self.author = author
         self.genre = genre
         self.published_on = published_on
-        self.notes = notes
-        self.lent_to = lent_to
-        self.to_be_returned_on = to_be_returned_on
-        self.is_returned = is_returned
 
 
 class Borrower(db.Model):
@@ -33,3 +29,5 @@ class Borrower(db.Model):
 
     def __init__(self, name):
         self.name = name
+
+
