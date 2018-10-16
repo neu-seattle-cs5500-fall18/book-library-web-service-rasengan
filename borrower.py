@@ -1,17 +1,15 @@
 from http import HTTPStatus
 
 from flask import (
-    Blueprint, jsonify
+    Blueprint
 )
-
-from database.models import db, Borrower
+from flask_restplus import Resource, Api
 
 borrower_app = Blueprint('borrower_app', __name__)
+api = Api(borrower_app)
 
 
-@borrower_app.route('/add/<person>')
-def add(person):
-    borrower = Borrower(person)
-    db.session.add(borrower)
-    db.session.commit()
-    return jsonify(response='Successfully added ' + person), HTTPStatus.CREATED
+@api.route('/')
+class Borrower(Resource):
+    def get(self):
+        return 'Borrower API!', HTTPStatus.OK
