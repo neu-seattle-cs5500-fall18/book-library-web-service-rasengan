@@ -3,11 +3,12 @@ from http import HTTPStatus
 from flask import (
     Blueprint, jsonify, request
 )
-
+from flask_restplus import Resource, Api
 
 from database.models import db, Book
-book_app = Blueprint('book_app', __name__)
-
+book_app = Blueprint('bookblla_app', __name__)
+api = Api(book_app, version='1.0', title='Book API',
+    description='Book class API')
 
 @book_app.route('/')
 def show():
