@@ -1,6 +1,7 @@
 from http import HTTPStatus
 
 from flask import Flask, jsonify
+
 from config import database_uri
 from database.models import db
 
@@ -15,9 +16,6 @@ def create_app():
     with app.app_context():
         db.init_app(app)
         db.create_all()
-
-    from api.booksDAO import book_app
-    app.register_blueprint(book_app, url_prefix='/book')
 
     from borrower import borrower_app
     app.register_blueprint(borrower_app, url_prefix='/borrower')
