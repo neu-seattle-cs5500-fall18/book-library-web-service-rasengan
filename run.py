@@ -43,15 +43,8 @@ def create_app():
         db.init_app(app)
         db.create_all()
 
-    api = Api(app)
+    api = Api(app, doc='/doc/')
     api_model = ApiModel(api)
-
-    @api.route('/')
-    class GoToBooks(Resource):
-        @api.doc(description='You are in home. \n\n ')
-        @api.response(HTTPStatus.OK, 'Success', api_model.postModel)
-        def get(self):
-            return {'success': True}
 
     @api.route('/books/')
     @api.doc(description='List of books \n\n ')
