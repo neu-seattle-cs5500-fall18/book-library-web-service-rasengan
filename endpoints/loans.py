@@ -29,10 +29,10 @@ class LoanedBooks(Resource):
                 to_be_returned_on = datetime.datetime.fromisoformat(book['to_be_returned_on'])
                 if today < to_be_returned_on:
                     book['return_status'] = 'Not late'
-                elif today == to_be_returned_on:
-                    book['return_status'] = 'On time'
                 else:
                     book['return_status'] = 'Late'
+            elif book['is_returned']:
+                book['return_status'] = 'Returned on time'
             loaned_books.append(book)
         result['loaned_books'] = loaned_books
         return result
@@ -43,10 +43,10 @@ class LoanedBooks(Resource):
     def post(self):
         """ loaned book """
         args = book_loan_parser.parse_args()
-        if args['book_id'] and args['lent_to'] and args['is_borrowing']:
+        if args['book_id'] and args['lent_to']:
             book = BookDBModel.query.get(args['book_id'])
             book.lent_to = args['lent_to']
-            if args['is_borrowing']:
+            if args['is_borrowing'] and args['is_borrowing'] == "true":
                 book.to_be_returned_on = datetime.datetime.now() + datetime.timedelta(days=10)
                 book.is_returned = False
             else:
