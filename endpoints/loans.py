@@ -24,7 +24,7 @@ class LoanedBooks(Resource):
             return []
         for x in resp:
             book = x.to_dict()
-            if book['to_be_returned_on'] and not book['is_returned']:
+            if book['to_be_returned_on'] and 'is_returned' not in book:
                 today = datetime.datetime.now()
                 to_be_returned_on = datetime.datetime.fromisoformat(book['to_be_returned_on'])
                 if today < to_be_returned_on:
