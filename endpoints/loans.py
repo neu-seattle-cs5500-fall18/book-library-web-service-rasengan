@@ -17,6 +17,8 @@ ns = api.namespace('loan', description='Operations with respect to loaning a boo
 @api.doc(description='List of books loaned. \n\n ')
 class LoanedBooks(Resource):
     @api.marshal_with(loan_model, as_list=True)
+    @api.response(HTTPStatus.OK, 'Fetching lent books request successful')
+    @api.response(HTTPStatus.BAD_REQUEST, 'Fetching lent books request unsuccessful')
     @api.doc(description='Get List of books loaned . \n\n ')
     def get(self):
         """ Get all lent books """
@@ -43,6 +45,8 @@ class LoanedBooks(Resource):
 
     @api.expect(book_loan_parser, validate=True)
     @api.marshal_with(loan_model)
+    @api.response(HTTPStatus.OK, 'Loaning book request successful')
+    @api.response(HTTPStatus.BAD_REQUEST, 'Loaning book request unsuccessful')
     @api.doc(description='Lend a book to a borrower . \n\n ')
     def post(self):
         """ Loan a book """
@@ -62,6 +66,7 @@ class LoanedBooks(Resource):
     @api.expect(book_loan_parser, validate=True)
     @api.marshal_with(loan_model)
     @api.response(HTTPStatus.OK, 'Returned book successfully')
+    @api.response(HTTPStatus.BAD_REQUEST, 'Return book request unsuccessful')
     @api.doc(description='Mark a lent book as returned . \n\n ')
     def delete(self):
         """ Return a book """
@@ -83,9 +88,10 @@ class LoanedBooks(Resource):
 class LoanReminder(Resource):
     @api.expect(book_loan_parser, validate=True)
     @api.response(HTTPStatus.OK, 'Mail sent successfully')
+    @api.response(HTTPStatus.BAD_REQUEST, 'Reminder request unsuccessful')
     @api.doc(description='Remind borrower for a book . \n\n ')
     def post(self):
-        """ Loan a book """
+        """ Send reminder for a lent book """
         try:
             args = book_loan_parser.parse_args()
             book = BookDBModel.query.get(args['book_id'])

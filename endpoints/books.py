@@ -16,6 +16,8 @@ ns = api.namespace('books', description='Operations with respect to books')
 class Books(Resource):
     @api.expect(book_get_parser, validate=False)
     @api.marshal_with(book_model, as_list=True)
+    @api.response(HTTPStatus.OK, 'Fetching books request successful')
+    @api.response(HTTPStatus.BAD_REQUEST, 'Fetching books request unsuccessful')
     @api.doc(description='Get List of books . \n\n ')
     def get(self):
         """ Get all books """
@@ -42,6 +44,7 @@ class Books(Resource):
 
     @api.expect(book_parser, validate=False)
     @api.response(HTTPStatus.CREATED, 'Book added successfully!', book_model)
+    @api.response(HTTPStatus.BAD_REQUEST, 'Adding book request unsuccessful')
     @api.doc(description='Add new book by title,author,genre, published_on . \n\n ')
     def post(self):
         """ add book """
@@ -61,6 +64,7 @@ class Book(Resource):
     @api.doc(description='Get Book by book id. \n\n ' \
                          '* [Test query] `id`=1')
     @api.response(HTTPStatus.OK, 'Fetched book successfully', book_model)
+    @api.response(HTTPStatus.BAD_REQUEST, 'Fetching book request unsuccessful')
     def get(self, id):
         """ Get book by id """
         try:
@@ -70,6 +74,7 @@ class Book(Resource):
             return {'msg': 'There was an error', 'error': str(e)}, HTTPStatus.BAD_REQUEST
 
     @api.response(HTTPStatus.OK, 'Deleted book successfully', book_model)
+    @api.response(HTTPStatus.BAD_REQUEST, 'Deleting book request unsuccessful')
     @api.doc(description='Delete Book  by book id. \n\n '
                          '* [Test query] `id`=1')
     def delete(self, id):
@@ -87,6 +92,7 @@ class Book(Resource):
 
     @api.expect(book_update_parser, validate=False)
     @api.response(HTTPStatus.OK, 'Book successfully updated', book_model)
+    @api.response(HTTPStatus.BAD_REQUEST, 'Updating book request unsuccessful')
     def put(self, id):
         """ Update book by id """
         try:

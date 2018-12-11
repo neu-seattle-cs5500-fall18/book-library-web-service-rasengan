@@ -17,6 +17,8 @@ ns = api.namespace('lists', description='Operations with respect to books list')
 class Lists(Resource):
     @api.expect(list_get_parser, validate=False)
     @api.marshal_with(list_model, as_list=True)
+    @api.response(HTTPStatus.OK, 'Fetching lists successful')
+    @api.response(HTTPStatus.BAD_REQUEST, 'Fetching lists unsuccessful')
     @api.doc(description='Get List of books . \n\n ')
     def get(self):
         """ Get all lists """
@@ -46,6 +48,7 @@ class Lists(Resource):
 
     @api.expect(list_get_parser, validate=True)
     @api.response(HTTPStatus.CREATED, 'Successfully created a list', success_model)
+    @api.response(HTTPStatus.BAD_REQUEST, 'Creating list unsuccessful')
     @api.doc(description='Add new custom list by providing a description . \n\n ')
     def post(self):
         """ create a list for books """
@@ -66,6 +69,7 @@ class List(Resource):
                          '* [Test query] `id`=1')
     @api.marshal_with(list_model)
     @api.response(HTTPStatus.OK, 'Fetched list successfully')
+    @api.response(HTTPStatus.BAD_REQUEST, 'Fetching list unsuccessful')
     def get(self, id):
         """ Get list by id """
         try:
@@ -84,6 +88,7 @@ class List(Resource):
     @api.doc(description='Add books to a list. \n\n')
     @api.expect(list_add_parser, validate=False)
     @api.response(HTTPStatus.CREATED, 'Added books to list successfully', success_model)
+    @api.response(HTTPStatus.BAD_REQUEST, 'Adding books to list unsuccessful')
     def post(self, id):
         """ Add books to a list by list_id and book id """
         try:
