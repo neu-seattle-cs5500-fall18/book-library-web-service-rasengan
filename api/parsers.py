@@ -36,5 +36,3 @@ borrower_update_parser.add_argument('email', required=False, help='email of borr
 book_loan_parser = reqparse.RequestParser()
 book_loan_parser.add_argument('book_id', required=True, help='id of book being borrowed', location='args')
 book_loan_parser.add_argument('lent_to', required=True, help='id of borrower being lent to', location='args')
-book_loan_parser.add_argument('is_borrowing', required=True, help='is borrowing? ("false" if returning)',
-                              location='args', default="true")

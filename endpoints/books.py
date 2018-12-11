@@ -3,7 +3,7 @@ from http import HTTPStatus
 from flask_restplus import Resource
 
 from api import api
-from api.api_models import bookModel, postModel
+from api.api_models import bookModel, booksModel
 from api.parsers import book_parser, book_get_parser, book_update_parser
 from database import db
 from database.db_models import Book as BookModel
@@ -15,7 +15,7 @@ ns = api.namespace('books', description='Operations with respect to books')
 @api.doc(description='List of books \n\n ')
 class Books(Resource):
     @api.expect(book_get_parser, validate=False)
-    @api.response(HTTPStatus.OK, 'Fetched books successful')
+    @api.response(HTTPStatus.OK, 'Fetched books successful', booksModel)
     @api.doc(description='Get List of books . \n\n ')
     def get(self):
         """ Get all books """
@@ -43,7 +43,7 @@ class Books(Resource):
             return {'msg': 'There was an error', 'error': str(e)}, HTTPStatus.BAD_REQUEST
 
     @api.expect(book_parser, validate=False)
-    @api.response(HTTPStatus.CREATED, 'Book added successfully!', postModel)
+    @api.response(HTTPStatus.CREATED, 'Book added successfully!', bookModel)
     @api.doc(description='Add new book by title,author,genre, published_on . \n\n ')
     def post(self):
         """ add book """
@@ -52,7 +52,7 @@ class Books(Resource):
             book = BookModel(args['title'], args['author'], args['genre'], args['published_on'], args['notes'])
             db.session.add(book)
             db.session.commit()
-            return {'success': True}, HTTPStatus.CREATED
+            return book.to_dict(), HTTPStatus.CREATED
         except Exception as e:
             return {'msg': 'There was an error', 'error': str(e)}, HTTPStatus.BAD_REQUEST
 
@@ -67,12 +67,11 @@ class Book(Resource):
         """ Get book by id """
         try:
             result = BookModel.query.get(id)
-
             return (result.to_dict() if result else {'success': False, 'msg': 'book does not exist'}), HTTPStatus.OK
         except Exception as e:
             return {'msg': 'There was an error', 'error': str(e)}, HTTPStatus.BAD_REQUEST
 
-    @api.response(HTTPStatus.OK, 'Deleted book successfully', postModel)
+    @api.response(HTTPStatus.OK, 'Deleted book successfully', bookModel)
     @api.doc(description='Delete Book  by book id. \n\n '
                          '* [Test query] `id`=1')
     def delete(self, id):
@@ -82,14 +81,14 @@ class Book(Resource):
             if book:
                 db.session.delete(book)
                 db.session.commit()
-                return {'success': True}, HTTPStatus.OK
+                return book.to_dict(), HTTPStatus.OK
             else:
                 return {'success': False, 'msg': 'book does not exist'}, HTTPStatus.BAD_REQUEST
         except Exception as e:
             return {'msg': 'There was an error', 'error': str(e)}, HTTPStatus.BAD_REQUEST
 
     @api.expect(book_update_parser, validate=False)
-    @api.response(HTTPStatus.OK, 'Book successfully updated')
+    @api.response(HTTPStatus.OK, 'Book successfully updated', bookModel)
     def put(self, id):
         """ Update book by id """
         try:
@@ -113,7 +112,7 @@ class Book(Resource):
                 if args.get('is_returned'):
                     book.is_returned = args['is_returned']
                 db.session.commit()
-                return {'success': True}, HTTPStatus.OK
+                return book.to_dict(), HTTPStatus.OK
             else:
                 return {'success': False, 'msg': 'book does not exist'}, HTTPStatus.BAD_REQUEST
         except Exception as e:

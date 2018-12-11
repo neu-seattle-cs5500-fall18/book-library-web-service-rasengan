@@ -14,12 +14,20 @@ bookModel = api.model('bookModel', {
     "is_returned": fields.Boolean
 })
 
+booksModel = api.model('booksModel', {
+    "books": fields.List(fields.Nested(bookModel))
+})
+
 borrowerModel = api.model('borrowerModel', {
     "borrower_id": fields.Integer,
     "name": fields.String,
     "email": fields.String
 })
 
-postModel = api.model('postModel', {
+borrowersModel = api.model('borrowersModel', {
+    "borrowers": fields.List(fields.Nested(borrowerModel))
+})
+
+successModel = api.model('successModel', {
     "success": fields.Boolean
 })
