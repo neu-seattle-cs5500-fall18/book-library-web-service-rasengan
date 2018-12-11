@@ -24,7 +24,7 @@ class LoanedBooks(Resource):
             return []
         for x in resp:
             book = x.to_dict()
-            if book['to_be_returned_on'] and 'is_returned' not in book:
+            if book.get('to_be_returned_on', None) and 'is_returned' not in book:
                 today = datetime.datetime.now()
                 to_be_returned_on = datetime.datetime.fromisoformat(book['to_be_returned_on'])
                 if today < to_be_returned_on:
@@ -43,10 +43,10 @@ class LoanedBooks(Resource):
     def post(self):
         """ loaned book """
         args = book_loan_parser.parse_args()
-        if args['book_id'] and args['lent_to']:
+        if args.get('book_id') and args.get('lent_to'):
             book = BookDBModel.query.get(args['book_id'])
             book.lent_to = args['lent_to']
-            if args['is_borrowing'] and args['is_borrowing'] == "true":
+            if args.get('is_borrowing', 'false') == "true":
                 book.to_be_returned_on = datetime.datetime.now() + datetime.timedelta(days=10)
                 book.is_returned = False
             else:
