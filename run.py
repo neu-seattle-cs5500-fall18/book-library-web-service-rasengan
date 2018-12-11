@@ -1,10 +1,10 @@
 from flask import Flask, Blueprint
 
 from api import api
-from api.endpoints.books import ns as books_ns
-from api.endpoints.borrowers import ns as borrowers_ns
 from config import database_uri
 from database import db
+from endpoints.books import ns as books_ns
+from endpoints.borrowers import ns as borrowers_ns
 
 app = Flask(__name__)
 
