@@ -41,3 +41,10 @@ book_loan_parser.add_argument('is_borrowing', required=True, help='is borrowing?
 
 list_get_parser = reqparse.RequestParser()
 list_get_parser.add_argument('description',required=False, help='description of books list', location='args')
+
+list_update_parser = reqparse.RequestParser()
+list_update_parser.add_argument('list_id',required=True, help='id of list', location='args')
+list_update_parser.add_argument('description', required=True, help='new description of list', location='args')
+
+list_add_parser = reqparse.RequestParser()
+list_add_parser.add_argument('book_id', required = True, help='id of the book to add to list')
