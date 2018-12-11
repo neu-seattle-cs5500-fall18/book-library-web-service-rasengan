@@ -14,11 +14,12 @@ class Book(db.Model):
     to_be_returned_on = db.Column(db.DateTime, default=None)
     is_returned = db.Column(db.Boolean, default=False)
 
-    def __init__(self, title, author, genre, published_on):
+    def __init__(self, title, author, genre, published_on,notes):
         self.title = title
         self.author = author
         self.genre = genre
         self.published_on = published_on
+        self.notes = notes
 
     def to_dict(self):
         book_dict = {}
