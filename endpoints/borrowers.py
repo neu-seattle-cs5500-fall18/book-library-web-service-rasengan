@@ -15,6 +15,8 @@ ns = api.namespace('borrowers', description='Operations with respect to borrower
 @api.doc(description='List of borrowers. \n\n ')
 class Borrowers(Resource):
     @api.marshal_with(borrower_model, as_list=True)
+    @api.response(HTTPStatus.OK, 'Fetching all borrowers successful')
+    @api.response(HTTPStatus.BAD_REQUEST, 'Fetching borrowers request unsuccessful')
     @api.doc(description='Get List of borrowers . \n\n ')
     def get(self):
         """ Get all borrowers """
@@ -33,6 +35,7 @@ class Borrowers(Resource):
 
     @api.expect(borrower_parser, validate=False)
     @api.response(HTTPStatus.CREATED, 'Borrower added successfully', borrower_model)
+    @api.response(HTTPStatus.BAD_REQUEST, 'Adding borrower unsuccessful')
     @api.doc(description='Add new borrower by name & email. \n\n ')
     def post(self):
         """ add borrower """
@@ -52,6 +55,7 @@ class Borrower(Resource):
     @api.doc(description='Get borrower by borrower id. \n\n '
                          '* [Test query] `id`=1')
     @api.response(HTTPStatus.OK, 'Borrower fetched successfully!', borrower_model)
+    @api.response(HTTPStatus.BAD_REQUEST, 'Fetching borrower unsuccessful')
     def get(self, id):
         """ Get borrower by id """
         try:
@@ -61,6 +65,7 @@ class Borrower(Resource):
             return {'msg': 'There was an error', 'error': str(e)}, HTTPStatus.BAD_REQUEST
 
     @api.response(HTTPStatus.OK, 'Borrower successfully deleted')
+    @api.response(HTTPStatus.BAD_REQUEST, 'Deleting borrower unsuccessful')
     @api.doc(description='Delete Borrower  by book id. \n\n ' \
                          '* [Test query] `id`=1')
     def delete(self, id):
@@ -81,6 +86,7 @@ class Borrower(Resource):
 
     @api.expect(borrower_update_parser, validate=False)
     @api.response(HTTPStatus.OK, 'Borrower updated successfully', borrower_model)
+    @api.response(HTTPStatus.BAD_REQUEST, 'Updating borrower unsuccessful')
     def put(self, id):
         """ Update borrower by id """
         try:
