@@ -34,7 +34,7 @@ class Books(Resource):
     def post(self):
         """ add book """
         args = book_parser.parse_args()
-        book = BookModel(args['title'], args['author'], args['genre'], args['published_on'])
+        book = BookModel(args['title'], args['author'], args['genre'], args['published_on'],args['notes'])
         db.session.add(book)
         db.session.commit()
         return {'success': True}
