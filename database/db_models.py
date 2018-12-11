@@ -49,7 +49,7 @@ class Borrower(db.Model):
 
 
 class List(db.Model):
-    list_id = db.Column('borrower_id', db.Integer, primary_key=True)
+    list_id = db.Column('list_id', db.Integer, primary_key=True)
     description = db.Column(db.String(100))
 
     def __init__(self, description):
@@ -63,7 +63,7 @@ class List(db.Model):
 
 
 class ListBook(db.Model):
-    list_id = db.Column('borrower_id', db.Integer, primary_key=True, autoincrement=False)
+    list_id = db.Column('list_id', db.Integer, primary_key=True, autoincrement=False)
     book_id = db.Column('book_id', db.Integer, primary_key=True, autoincrement=False)
 
     def __init__(self, list_id, book_id):
