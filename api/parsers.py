@@ -1,6 +1,12 @@
 from flask_restplus import reqparse
 
 # Request Parsing
+
+book_get_parser = reqparse.RequestParser()
+book_get_parser.add_argument('author', required=False, help='author of book', location='args')
+book_get_parser.add_argument('genre', required=False, help='genre of book', location='args')
+book_get_parser.add_argument('published range',required=False, help='date range of publication in format dd/mm/yyyy-dd/mm/yyyy', location='args')
+
 book_parser = reqparse.RequestParser()
 book_parser.add_argument('title', required=True, help='name of book', location='args')
 book_parser.add_argument('author', required=True, help='name of author', location='args')
