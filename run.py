@@ -38,13 +38,17 @@ def create_app():
     # with app.app_context():
     #     db.create_all()
 
-    blueprint = Blueprint('api', __name__)
+    blueprint = Blueprint('api', __name__, url_prefix='/doc')
     api.init_app(blueprint)
     api.add_namespace(books_ns)
     api.add_namespace(borrowers_ns)
     api.add_namespace(loans_ns)
     api.add_namespace(lists_ns)
     app.register_blueprint(blueprint)
+
+    @app.route('/')
+    def hello_world():
+        return 'Hello Rasengan'
 
     # init BackgroundScheduler job
     scheduler = BackgroundScheduler()
