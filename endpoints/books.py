@@ -3,7 +3,7 @@ from http import HTTPStatus
 from flask_restplus import Resource
 
 from api import api
-from api.api_models import bookModel, booksModel
+from api.api_models import book_model
 from api.parsers import book_parser, book_get_parser, book_update_parser
 from database import db
 from database.db_models import Book as BookModel
@@ -15,12 +15,11 @@ ns = api.namespace('books', description='Operations with respect to books')
 @api.doc(description='List of books \n\n ')
 class Books(Resource):
     @api.expect(book_get_parser, validate=False)
-    @api.response(HTTPStatus.OK, 'Fetched books successful', booksModel)
+    @api.marshal_with(book_model, as_list=True)
     @api.doc(description='Get List of books . \n\n ')
     def get(self):
         """ Get all books """
         try:
-            result = {}
             books = []
             args = book_get_parser.parse_args()
             resp_query = BookModel.query
@@ -37,13 +36,12 @@ class Books(Resource):
                 return []
             for x in resp:
                 books.append(x.to_dict())
-            result['books'] = books
-            return result, HTTPStatus.OK
+            return books, HTTPStatus.OK
         except Exception as e:
             return {'msg': 'There was an error', 'error': str(e)}, HTTPStatus.BAD_REQUEST
 
     @api.expect(book_parser, validate=False)
-    @api.response(HTTPStatus.CREATED, 'Book added successfully!', bookModel)
+    @api.response(HTTPStatus.CREATED, 'Book added successfully!', book_model)
     @api.doc(description='Add new book by title,author,genre, published_on . \n\n ')
     def post(self):
         """ add book """
@@ -62,7 +60,7 @@ class Books(Resource):
 class Book(Resource):
     @api.doc(description='Get Book by book id. \n\n ' \
                          '* [Test query] `id`=1')
-    @api.response(HTTPStatus.OK, 'Fetched book successfully', bookModel)
+    @api.response(HTTPStatus.OK, 'Fetched book successfully', book_model)
     def get(self, id):
         """ Get book by id """
         try:
@@ -71,7 +69,7 @@ class Book(Resource):
         except Exception as e:
             return {'msg': 'There was an error', 'error': str(e)}, HTTPStatus.BAD_REQUEST
 
-    @api.response(HTTPStatus.OK, 'Deleted book successfully', bookModel)
+    @api.response(HTTPStatus.OK, 'Deleted book successfully', book_model)
     @api.doc(description='Delete Book  by book id. \n\n '
                          '* [Test query] `id`=1')
     def delete(self, id):
@@ -88,7 +86,7 @@ class Book(Resource):
             return {'msg': 'There was an error', 'error': str(e)}, HTTPStatus.BAD_REQUEST
 
     @api.expect(book_update_parser, validate=False)
-    @api.response(HTTPStatus.OK, 'Book successfully updated', bookModel)
+    @api.response(HTTPStatus.OK, 'Book successfully updated', book_model)
     def put(self, id):
         """ Update book by id """
         try:

@@ -2,7 +2,7 @@ from flask_restplus import fields
 
 from api import api
 
-bookModel = api.model('bookModel', {
+book_model = api.model('A book model', {
     "book_id": fields.Integer,
     "title": fields.String,
     "author": fields.String,
@@ -14,20 +14,22 @@ bookModel = api.model('bookModel', {
     "is_returned": fields.Boolean
 })
 
-booksModel = api.model('booksModel', {
-    "books": fields.List(fields.Nested(bookModel))
-})
-
-borrowerModel = api.model('borrowerModel', {
+borrower_model = api.model('A borrower model', {
     "borrower_id": fields.Integer,
     "name": fields.String,
     "email": fields.String
 })
 
-borrowersModel = api.model('borrowersModel', {
-    "borrowers": fields.List(fields.Nested(borrowerModel))
+success_model = api.model('A successful request', {
+    "success": fields.Boolean
 })
 
-successModel = api.model('successModel', {
-    "success": fields.Boolean
+loan_model = api.inherit('A loan model', book_model, {
+    "return_status": fields.String
+})
+
+list_model = api.model('A book list', {
+    "list_id": fields.Integer,
+    "description": fields.String,
+    "book_ids": fields.List(fields.Integer)
 })

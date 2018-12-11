@@ -3,7 +3,7 @@ from http import HTTPStatus
 from flask_restplus import Resource
 
 from api import api
-from api.api_models import borrowerModel, borrowersModel
+from api.api_models import borrower_model
 from api.parsers import borrower_update_parser, borrower_parser
 from database import db
 from database.db_models import Book as BookDBModel, Borrower as BorrowerDBModel
@@ -14,7 +14,7 @@ ns = api.namespace('borrowers', description='Operations with respect to borrower
 @ns.route('/')
 @api.doc(description='List of borrowers. \n\n ')
 class Borrowers(Resource):
-    @api.response(HTTPStatus.OK, 'Fetched borrowers successfully', borrowersModel)
+    @api.marshal_with(borrower_model, as_list=True)
     @api.doc(description='Get List of borrowers . \n\n ')
     def get(self):
         """ Get all borrowers """
@@ -27,13 +27,12 @@ class Borrowers(Resource):
                 return []
             for x in resp:
                 borrowers.append(x.to_dict())
-            result['borrowers'] = borrowers
-            return result, HTTPStatus.OK
+            return borrowers, HTTPStatus.OK
         except Exception as e:
             return {'msg': 'There was an error', 'error': str(e)}, HTTPStatus.BAD_REQUEST
 
     @api.expect(borrower_parser, validate=False)
-    @api.response(HTTPStatus.CREATED, 'Borrower added successfully', borrowerModel)
+    @api.response(HTTPStatus.CREATED, 'Borrower added successfully', borrower_model)
     @api.doc(description='Add new borrower by name & email. \n\n ')
     def post(self):
         """ add borrower """
@@ -52,7 +51,7 @@ class Borrowers(Resource):
 class Borrower(Resource):
     @api.doc(description='Get borrower by borrower id. \n\n '
                          '* [Test query] `id`=1')
-    @api.response(HTTPStatus.OK, 'Borrower fetched successfully!', borrowerModel)
+    @api.response(HTTPStatus.OK, 'Borrower fetched successfully!', borrower_model)
     def get(self, id):
         """ Get borrower by id """
         try:
@@ -81,7 +80,7 @@ class Borrower(Resource):
             return {'msg': 'There was an error', 'error': str(e)}, HTTPStatus.BAD_REQUEST
 
     @api.expect(borrower_update_parser, validate=False)
-    @api.response(HTTPStatus.OK, 'Borrower updated successfully', borrowerModel)
+    @api.response(HTTPStatus.OK, 'Borrower updated successfully', borrower_model)
     def put(self, id):
         """ Update borrower by id """
         try:
