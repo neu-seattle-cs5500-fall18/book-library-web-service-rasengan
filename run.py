@@ -10,6 +10,7 @@ from database import db
 from endpoints.books import ns as books_ns
 from endpoints.borrowers import ns as borrowers_ns, Borrower
 from endpoints.loans import ns as loans_ns, LoanedBooks
+from endpoints.lists import ns as lists_ns
 
 mail_settings = {
     "MAIL_SERVER": 'smtp.gmail.com',
@@ -40,6 +41,7 @@ def create_app():
     api.add_namespace(books_ns)
     api.add_namespace(borrowers_ns)
     api.add_namespace(loans_ns)
+    api.add_namespace(lists_ns)
     app.register_blueprint(blueprint)
 
     # init BackgroundScheduler job
