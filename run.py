@@ -17,16 +17,18 @@ def create_app():
     app.config.SWAGGER_UI_DOC_EXPANSION = 'list'
 
     db.init_app(app)
+    # with app.app_context():
+    #     db.create_all()
 
-    blueprint = Blueprint('api', __name__, url_prefix='/doc/')
+    blueprint = Blueprint('api', __name__)
     api.init_app(blueprint)
     api.add_namespace(books_ns)
     api.add_namespace(borrowers_ns)
     app.register_blueprint(blueprint)
 
-    @app.route('/')
-    def hello_world():
-        return 'Hello World'
+    # @app.route('/')
+    # def hello_world():
+    #     return 'Hello World'
     return app
 
 

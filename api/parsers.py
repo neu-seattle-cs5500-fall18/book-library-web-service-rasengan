@@ -19,6 +19,7 @@ book_update_parser.add_argument('is_returned', required=False, help='book is ret
 
 borrower_parser = reqparse.RequestParser()
 borrower_parser.add_argument('name', required=True, help='name of borrower', location='args')
+borrower_parser.add_argument('email', required=True, help='email of borrower', location='args')
 
 borrower_update_parser = reqparse.RequestParser()
 borrower_update_parser.add_argument('id', required=True, help='id of borrower', location='args')
