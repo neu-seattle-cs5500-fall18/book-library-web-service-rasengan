@@ -1,3 +1,4 @@
+import datetime
 from http import HTTPStatus
 
 from flask_restplus import Resource
@@ -22,18 +23,33 @@ class LoanedBooks(Resource):
         if not resp:
             return []
         for x in resp:
-            loaned_books.append(x.to_dict())
+            book = x.to_dict()
+            if book['to_be_returned_on']:
+                today = datetime.datetime.now()
+                to_be_returned_on = datetime.datetime.fromisoformat(book['to_be_returned_on'])
+                if today < to_be_returned_on:
+                    book['return_status'] = 'Not late'
+                elif today == to_be_returned_on:
+                    book['return_status'] = 'On time'
+                else:
+                    book['return_status'] = 'Late'
+            loaned_books.append(book)
         result['loaned_books'] = loaned_books
         return result
 
     @api.expect(book_loan_parser, validate=True)
-    @api.response(HTTPStatus.OK, 'Updated')
+    @api.response(HTTPStatus.OK, 'Loaned')
     @api.doc(description='Lend a book to a borrower . \n\n ')
     def post(self):
-        """ add borrower """
+        """ loaned book """
         args = book_loan_parser.parse_args()
-        if args['book_id'] and args['lent_to']:
+        if args['book_id'] and args['lent_to'] and args['is_borrowing']:
             book = BookDBModel.query.get(args['book_id'])
             book.lent_to = args['lent_to']
+            if args['is_borrowing']:
+                book.to_be_returned_on = datetime.datetime.now() + datetime.timedelta(days=10)
+                book.is_returned = False
+            else:
+                book.is_returned = True
             db.session.commit()
         return {'success': True}

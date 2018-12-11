@@ -28,3 +28,5 @@ borrower_update_parser.add_argument('name', required=False, help='id of borrower
 book_loan_parser = reqparse.RequestParser()
 book_loan_parser.add_argument('book_id', required=True, help='id of book being borrowed', location='args')
 book_loan_parser.add_argument('lent_to', required=True, help='id of borrower being lent to', location='args')
+book_loan_parser.add_argument('is_borrowing', required=True, help='is person borrowing or returning', location='args',
+                              type=bool, default=True)
