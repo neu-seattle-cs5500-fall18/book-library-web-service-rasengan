@@ -1,10 +1,10 @@
 from http import HTTPStatus
 
 from flask_restplus import Resource
-
+from datetime import datetime
 from api import api
 from api.api_models import bookModel, postModel
-from api.parsers import book_parser, book_update_parser
+from api.parsers import book_parser,book_get_parser, book_update_parser
 from database import db
 from database.db_models import Book as BookModel
 
@@ -14,13 +14,28 @@ ns = api.namespace('books', description='Operations with respect to books')
 @ns.route('/')
 @api.doc(description='List of books \n\n ')
 class Books(Resource):
+    @api.expect(book_get_parser, validate=False)
     @api.doc(description='Get List of books . \n\n ')
     def get(self):
         """ Get all books """
         result = {}
         books = []
-
-        resp = BookModel.query.all()
+        args = book_get_parser.parse_args()
+        resp_query = BookModel.query
+        if args['author']:
+            resp_query = resp_query.filter_by(author=args['author'])
+            #resp = BookModel.query.filter_by(author=args['author']).all()
+        if args['genre']:
+            resp_query = resp_query.filter_by(genre=args['genre'])
+            #resp = BookModel.query.filter_by(genre=args['genre']).all()
+        if args['published range']:
+            start=args['published range'].split('-')[0]
+            end=args['published range'].split('-')[1]
+            resp_query = resp_query.filter(BookModel.published_on.between(start,end))
+            #resp=BookModel.query.filter(BookModel.published_on.between(start,end))
+        resp = resp_query.all()
+        # else:
+        #     resp = BookModel.query.all()
         if not resp:
             return []
         for x in resp:
