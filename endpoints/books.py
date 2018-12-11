@@ -1,10 +1,10 @@
 from http import HTTPStatus
 
 from flask_restplus import Resource
-from datetime import datetime
+
 from api import api
 from api.api_models import bookModel, postModel
-from api.parsers import book_parser,book_get_parser, book_update_parser
+from api.parsers import book_parser, book_get_parser, book_update_parser
 from database import db
 from database.db_models import Book as BookModel
 
@@ -22,17 +22,14 @@ class Books(Resource):
         books = []
         args = book_get_parser.parse_args()
         resp_query = BookModel.query
-        if args['author']:
+        if args.get('author'):
             resp_query = resp_query.filter_by(author=args['author'])
-            #resp = BookModel.query.filter_by(author=args['author']).all()
-        if args['genre']:
+        if args.get('genre'):
             resp_query = resp_query.filter_by(genre=args['genre'])
-            #resp = BookModel.query.filter_by(genre=args['genre']).all()
-        if args['published range']:
-            start=args['published range'].split('-')[0]
-            end=args['published range'].split('-')[1]
-            resp_query = resp_query.filter(BookModel.published_on.between(start,end))
-            #resp=BookModel.query.filter(BookModel.published_on.between(start,end))
+        if args.get('published range'):
+            start = args['published range'].split('-')[0]
+            end = args['published range'].split('-')[1]
+            resp_query = resp_query.filter(BookModel.published_on.between(start, end))
         resp = resp_query.all()
         # else:
         #     resp = BookModel.query.all()
@@ -49,7 +46,7 @@ class Books(Resource):
     def post(self):
         """ add book """
         args = book_parser.parse_args()
-        book = BookModel(args['title'], args['author'], args['genre'], args['published_on'],args['notes'])
+        book = BookModel(args['title'], args['author'], args['genre'], args['published_on'], args['notes'])
         db.session.add(book)
         db.session.commit()
         return {'success': True}
@@ -90,21 +87,21 @@ class Book(Resource):
         book = BookModel.query.get(id)
         if book:
             args = book_update_parser.parse_args()
-            if args['title']:
+            if args.get('title'):
                 book.title = args['title']
-            if args['author']:
+            if args.get('author'):
                 book.author = args['author']
-            if args['genre']:
+            if args.get('genre'):
                 book.genre = args['genre']
-            if args['published_on']:
+            if args.get('published_on'):
                 book.published_on = args['published_on']
-            if args['notes']:
+            if args.get('notes'):
                 book.notes = args['notes']
-            if args['lent_to']:
+            if args.get('lent_to'):
                 book.lent_to = args['lent_to']
-            if args['to_be_returned_on']:
+            if args.get('to_be_returned_on'):
                 book.is_returned = args['to_be_returned_on']
-            if args['is_returned']:
+            if args.get('is_returned'):
                 book.is_returned = args['is_returned']
             db.session.commit()
             return {'success': True}

@@ -4,7 +4,7 @@ from flask_restplus import Resource
 
 from api import api
 from api.api_models import borrowerModel
-from api.parsers import book_update_parser, borrower_parser
+from api.parsers import borrower_update_parser, borrower_parser
 from database import db
 from database.db_models import Book as BookDBModel, Borrower as BorrowerDBModel
 
@@ -48,9 +48,8 @@ class Borrower(Resource):
     @api.response(HTTPStatus.OK, 'Success', borrowerModel)
     def get(self, id):
         """ Get borrower by id """
-        result = {}
 
-        result = BookDBModel.query.get(id)
+        result = BorrowerDBModel.query.get(id)
 
         return result.to_dict() if result else {'success': False, 'msg': 'borrower does not exist'}
 
@@ -72,16 +71,18 @@ class Borrower(Resource):
         else:
             return {'success': False, 'msg': 'borrower does not exist'}
 
-    @api.expect(book_update_parser, validate=False)
+    @api.expect(borrower_update_parser, validate=False)
     @api.response(HTTPStatus.CREATED, 'Success', borrowerModel)
     def put(self, id):
         """ Update borrower by id """
         borrower = BorrowerDBModel.query.get(id)
         if borrower:
-            args = book_update_parser.parse_args()
-            if args['title']:
+            args = borrower_update_parser.parse_args()
+            if args.get('name'):
                 borrower.name = args['name']
-                db.session.commit()
-                return {'success': True}
+            if args.get('email'):
+                borrower.email = args['email']
+            db.session.commit()
+            return {'success': True}
         else:
             return {'success': False, 'msg': 'borrower does not exist'}
