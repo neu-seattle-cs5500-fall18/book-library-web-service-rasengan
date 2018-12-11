@@ -24,15 +24,12 @@ class Books(Resource):
         resp_query = BookModel.query
         if args['author']:
             resp_query = resp_query.filter_by(author=args['author'])
-            #resp = BookModel.query.filter_by(author=args['author']).all()
         if args['genre']:
             resp_query = resp_query.filter_by(genre=args['genre'])
-            #resp = BookModel.query.filter_by(genre=args['genre']).all()
         if args['published range']:
             start=args['published range'].split('-')[0]
             end=args['published range'].split('-')[1]
             resp_query = resp_query.filter(BookModel.published_on.between(start,end))
-            #resp=BookModel.query.filter(BookModel.published_on.between(start,end))
         resp = resp_query.all()
         # else:
         #     resp = BookModel.query.all()
