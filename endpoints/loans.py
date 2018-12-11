@@ -24,15 +24,15 @@ class LoanedBooks(Resource):
             return []
         for x in resp:
             book = x.to_dict()
-            if book['to_be_returned_on']:
+            if book['to_be_returned_on'] and not book['is_returned']:
                 today = datetime.datetime.now()
                 to_be_returned_on = datetime.datetime.fromisoformat(book['to_be_returned_on'])
                 if today < to_be_returned_on:
                     book['return_status'] = 'Not late'
                 else:
                     book['return_status'] = 'Late'
-            elif book['is_returned']:
-                book['return_status'] = 'Returned on time'
+            else:
+                book['return_status'] = 'No issues with return'
             loaned_books.append(book)
         result['loaned_books'] = loaned_books
         return result
