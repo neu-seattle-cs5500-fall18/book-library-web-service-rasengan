@@ -3,10 +3,10 @@ from http import HTTPStatus
 from flask_restplus import Resource
 
 from api import api
-from api.models import borrowerModel
+from api.api_models import borrowerModel
 from api.parsers import book_update_parser, borrower_parser
 from database import db
-from database.dbmodels import Book as BookDBModel, Borrower as BorrowerDBModel
+from database.db_models import Book as BookDBModel, Borrower as BorrowerDBModel
 
 ns = api.namespace('borrowers', description='Operations with respect to borrowers')
 
@@ -34,7 +34,7 @@ class Borrowers(Resource):
     def post(self):
         """ add borrower """
         args = borrower_parser.parse_args()
-        borrower = BorrowerDBModel(args['name'])
+        borrower = BorrowerDBModel(args['name'], args['email'])
         db.session.add(borrower)
         db.session.commit()
         return {'success': True}

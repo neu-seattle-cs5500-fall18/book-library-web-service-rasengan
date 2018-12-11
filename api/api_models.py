@@ -16,7 +16,8 @@ bookModel = api.model('bookModel', {
 
 borrowerModel = api.model('borrowerModel', {
     "borrower_id": fields.Integer,
-    "name": fields.String
+    "name": fields.String,
+    "email": fields.String
 })
 
 postModel = api.model('postModel', {

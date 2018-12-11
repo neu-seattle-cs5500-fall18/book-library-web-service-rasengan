@@ -34,9 +34,11 @@ class Book(db.Model):
 class Borrower(db.Model):
     borrower_id = db.Column('borrower_id', db.Integer, primary_key=True)
     name = db.Column(db.String(100))
+    email = db.Column(db.String(100))
 
-    def __init__(self, name):
+    def __init__(self, name, email):
         self.name = name
+        self.email = email
 
     def to_dict(self):
         borrower_dict = {}

@@ -3,10 +3,10 @@ from http import HTTPStatus
 from flask_restplus import Resource
 
 from api import api
-from api.models import bookModel, postModel
+from api.api_models import bookModel, postModel
 from api.parsers import book_parser, book_update_parser
 from database import db
-from database.dbmodels import Book as BookModel
+from database.db_models import Book as BookModel
 
 ns = api.namespace('books', description='Operations with respect to books')
 
