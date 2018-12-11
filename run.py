@@ -5,6 +5,7 @@ from config import database_uri
 from database import db
 from endpoints.books import ns as books_ns
 from endpoints.borrowers import ns as borrowers_ns
+from endpoints.loans import ns as loans_ns
 
 app = Flask(__name__)
 
@@ -24,6 +25,7 @@ def create_app():
     api.init_app(blueprint)
     api.add_namespace(books_ns)
     api.add_namespace(borrowers_ns)
+    api.add_namespace(loans_ns)
     app.register_blueprint(blueprint)
 
     # @app.route('/')
