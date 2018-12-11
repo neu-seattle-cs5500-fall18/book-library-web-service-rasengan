@@ -4,8 +4,6 @@ book-library-web-service-rasengan created by GitHub Classroom
 Repository created for -
 CS 5500 Managing Software Development (Fall 2018) at Northeastern University Seattle
 
-by
-
 Authors:
 
 Aditya Rathi - rathi.ad@husky.neu.edu 
